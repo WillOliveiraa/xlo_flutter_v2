@@ -1,3 +1,3 @@
 const keyCategoryTable = 'Categories';
-const keyCategoryId = 'objectId';
-const keyCategoryDescription = 'description';
+const keyAdTable = 'Ads';
+const keyUserTable = 'Users';

@@ -6,9 +6,8 @@ import 'package:xlo_flutter_v2/src/core/utils/tables_keys.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/usecases/save_category.dart';
 import 'package:xlo_flutter_v2/src/features/ad/domain/entities/category.dart';
 import 'package:xlo_flutter_v2/src/features/ad/infra/gateway/category_gateway_http.dart';
-import 'package:xlo_flutter_v2/src/features/ad/infra/http/parse_server_adapter.dart';
 
-class MockParseServerAdapter extends Mock implements ParseServerAdapter {}
+import '../../../../mocks/mock_parse_server_adapter.dart';
 
 void main() {
   final httpClient = MockParseServerAdapter();
