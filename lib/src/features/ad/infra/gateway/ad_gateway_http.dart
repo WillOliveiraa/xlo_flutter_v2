@@ -15,4 +15,14 @@ class AdGatewayHttp implements AdGateway {
     final response = await httpClient.post(keyAdTable, ad.toMap());
     return response.fold((failure) => Left(failure), (data) => Right(unit));
   }
+
+  @override
+  Future<Either<Failure, List<Ad>>> getAll() async {
+    final response = await httpClient.get(keyAdTable);
+    return response.fold((failure) => Left(failure), (data) {
+      final ads =
+          data.map((e) => Ad.fromMap(e as Map<String, dynamic>)).toList();
+      return Right(ads);
+    });
+  }
 }
