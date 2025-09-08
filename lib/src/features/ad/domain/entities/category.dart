@@ -19,7 +19,7 @@ class Category extends LucidValidator<Category> {
 
   factory Category.fromMap(Map<String, dynamic> map) {
     return Category(
-      id: map['id'] != null ? map['id'] as String : map['objectId'] as String?,
+      id: map['id'] as String?,
       description: map['description'] as String,
     );
   }

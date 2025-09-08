@@ -4,15 +4,15 @@ import 'package:xlo_flutter_v2/src/core/utils/contants.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/usecases/get_all_categories.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/usecases/save_category.dart';
 import 'package:xlo_flutter_v2/src/features/ad/domain/entities/category.dart';
-import 'package:xlo_flutter_v2/src/features/ad/gateways/category_gateway.dart';
-import 'package:xlo_flutter_v2/src/features/ad/http/parse_server_adapter.dart';
+import 'package:xlo_flutter_v2/src/features/ad/infra/gateway/category_gateway_http.dart';
+import 'package:xlo_flutter_v2/src/features/ad/infra/http/parse_server_adapter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeParseServer();
 
   final httpClient = ParseServerAdapter();
-  final categoryGateway = CategoryGatewayImpl(httpClient);
+  final categoryGateway = CategoryGatewayHttp(httpClient);
   final getAllCategories = GetAllCategories(categoryGateway);
   final saveCategory = SaveCategory(categoryGateway);
   // final category = Category(description: 'Eletrônicos');
@@ -27,18 +27,6 @@ void main() async {
       debugPrint('Category: ${category.description}, ID: ${category.id}');
     }),
   );
-
-  // final parseObject = ParseObject(keyCategoryTable);
-  // final response = await parseObject.getAll();
-  // if (response.success) {
-  //   final list = response.results ?? [];
-  //   for (var element in list) {
-  //     final map = element.toJson() as Map<String, dynamic>;
-  //     debugPrint('Category: ${map['description']}');
-  //   }
-  // } else {
-  //   debugPrint(response.error?.message);
-  // }
 
   runApp(const MyApp());
 }
