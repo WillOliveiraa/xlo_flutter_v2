@@ -1,6 +1,6 @@
 import 'package:lucid_validation/lucid_validation.dart';
+import 'package:xlo_flutter_v2/src/features/auth/domain/entities/user.dart';
 
-import '../../../auth/domain/entities/user.dart';
 import 'category.dart';
 
 enum AdStatus { pending, active, sold, deleted }

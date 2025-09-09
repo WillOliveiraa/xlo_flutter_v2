@@ -1,5 +1,5 @@
 abstract class Failure implements Exception {
-  final String message;
+  final String? message;
 
-  Failure(this.message);
+  Failure([this.message]);
 }

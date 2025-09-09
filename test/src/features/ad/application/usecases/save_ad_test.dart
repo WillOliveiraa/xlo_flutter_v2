@@ -12,8 +12,8 @@ import '../../../../mocks/mock_parse_server_adapter.dart';
 
 void main() {
   final httpClient = MockParseServerAdapter();
-  final adRespository = AdGatewayHttp(httpClient);
-  final saveAd = SaveAd(adRespository);
+  final adGateway = AdGatewayHttp(httpClient);
+  final saveAd = SaveAd(adGateway);
   final ad = Ad.fromMap(adsMocks.first);
 
   test('should save an ad', () async {

@@ -1,15 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:parameterized_test/parameterized_test.dart';
-import 'package:xlo_flutter_v2/src/features/auth/domain/entities/user.dart';
+import 'package:xlo_flutter_v2/src/features/auth/domain/entities/enum/user_type.dart';
+import 'package:xlo_flutter_v2/src/features/auth/domain/entities/sign_up_user.dart';
 
 import '../../../../mocks/user_mock.dart';
 
 void main() {
   group('should check if field is valid or not', () {
     final skip = false;
-    test('should create a valid [User]', () {
-      final ad = User.fromMap(usersMock.first);
-      expect(ad, isA<User>());
+    test('should create a valid [SignUpEntity]', () {
+      final ad = SignUpEntity.fromMap(usersMock.first);
+      expect(ad, isA<SignUpEntity>());
       expect(ad.id, '1');
       expect(ad.name, 'John Doe');
       expect(ad.email, 'john.doe@gmail.com');
@@ -20,10 +21,10 @@ void main() {
     }, skip: skip);
 
     parameterizedTest(
-      'when validating [User] with invalid name',
+      'when validating [SignUpEntity] with invalid name',
       ['', ' ', 'Wi'],
       (String value) {
-        final ad = User(
+        final ad = SignUpEntity(
           id: usersMock.first['id'],
           name: value,
           email: usersMock.first['email'],
@@ -50,10 +51,10 @@ void main() {
     );
 
     parameterizedTest(
-      'when validating [User] with invalid email',
+      'when validating [SignUpEntity] with invalid email',
       ['', ' ', 'invalidemail', 'user@domain', 'user@.com'],
       (String value) {
-        final ad = User(
+        final ad = SignUpEntity(
           id: usersMock.first['id'],
           name: usersMock.first['name'],
           email: value,
@@ -78,7 +79,7 @@ void main() {
     );
 
     parameterizedTest(
-      'when validating [User] with invalid password',
+      'when validating [SignUpEntity] with invalid password',
       [
         ['', 'empty'],
         [' ', 'empty'],
@@ -89,7 +90,7 @@ void main() {
         ['NoSpecial1', 'noSpecial'],
       ],
       (String value, String caseName) {
-        final ad = User(
+        final ad = SignUpEntity(
           id: usersMock.first['id'],
           name: usersMock.first['name'],
           email: usersMock.first['email'],

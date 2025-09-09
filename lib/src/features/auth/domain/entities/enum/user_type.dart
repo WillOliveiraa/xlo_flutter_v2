@@ -1,0 +1,1 @@
+enum UserType { particular, professional }
