@@ -2,10 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:xlo_flutter_v2/src/core/errors/api_error.dart';
+import 'package:xlo_flutter_v2/src/core/http/parse_server_adapter.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/usecases/get_all_ads.dart';
 import 'package:xlo_flutter_v2/src/features/ad/domain/entities/ad.dart';
 import 'package:xlo_flutter_v2/src/features/ad/infra/gateway/ad_gateway_http.dart';
-import 'package:xlo_flutter_v2/src/features/ad/infra/http/parse_server_adapter.dart';
 
 import '../../../../mocks/ad_mock.dart';
 

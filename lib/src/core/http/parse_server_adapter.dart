@@ -34,8 +34,11 @@ class ParseServerAdapter implements HttpClient {
     String url,
     Map<String, dynamic> data,
   ) async {
-    if (url == keyUserTable) {
-      return await signUp(data);
+    switch (url) {
+      case keySignUp:
+        return await signUp(data);
+      case keyLogin:
+        return await login(data);
     }
     final parseObject = ParseObject(url);
     for (final entry in data.entries) {
@@ -58,6 +61,23 @@ class ParseServerAdapter implements HttpClient {
     final response = await user.signUp();
     if (response.success) {
       return Right(response.result);
+    } else {
+      debugPrint(response.error?.message);
+      return Left(ApiError(response.error?.message ?? 'Unknown error'));
+    }
+  }
+
+  Future<Either<Failure, Object>> login(Map<String, dynamic> data) async {
+    final parseUser = ParseUser(data['email'], data['password'], null);
+    final response = await parseUser.login();
+    if (response.success) {
+      final convertedList =
+          response.results!.map((e) {
+            final json = e.toJson() as Map<String, dynamic>;
+            json['id'] = e.objectId;
+            return json;
+          }).toList();
+      return Right(convertedList.first);
     } else {
       debugPrint(response.error?.message);
       return Left(ApiError(response.error?.message ?? 'Unknown error'));

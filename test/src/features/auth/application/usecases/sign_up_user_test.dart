@@ -28,7 +28,7 @@ void main() {
 
   test('should return a ApiError', () async {
     when(
-      () => httpClient.post(keyUserTable, user.toMap()),
+      () => httpClient.post(keySignUp, user.toMap()),
     ).thenAnswer((_) async => Left(ApiError('Any error')));
 
     final result = (await signUp(user)).fold(id, id);

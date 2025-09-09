@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:xlo_flutter_v2/src/core/errors/custom_argument_error.dart';
+import 'package:xlo_flutter_v2/src/core/http/parse_server_adapter.dart';
 import 'package:xlo_flutter_v2/src/core/utils/contants.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/usecases/get_all_categories.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/usecases/save_category.dart';
 import 'package:xlo_flutter_v2/src/features/ad/domain/entities/category.dart';
 import 'package:xlo_flutter_v2/src/features/ad/infra/gateway/category_gateway_http.dart';
-import 'package:xlo_flutter_v2/src/features/ad/infra/http/parse_server_adapter.dart';
 import 'package:xlo_flutter_v2/src/features/auth/application/usecases/get_user_by_id.dart';
+import 'package:xlo_flutter_v2/src/features/auth/application/usecases/login.dart';
 import 'package:xlo_flutter_v2/src/features/auth/application/usecases/sign_up_user.dart';
+import 'package:xlo_flutter_v2/src/features/auth/domain/entities/login.dart';
 import 'package:xlo_flutter_v2/src/features/auth/domain/entities/sign_up_user.dart';
 import 'package:xlo_flutter_v2/src/features/auth/infra/gateway/user_gateway_http.dart';
 
@@ -20,9 +22,21 @@ void main() async {
 
   // await saveCategories(httpClient);
   // await signUpUser(httpClient);
-  await getUserById(httpClient);
+  // await getUserById(httpClient);
+  await login(httpClient);
 
   runApp(const MyApp());
+}
+
+Future<void> login(ParseServerAdapter httpClient) async {
+  final userGateway = UserGatewayHttp(httpClient);
+  final login = Login(userGateway);
+  final input = LoginInput('john.doe@gmail.com', 'Password123@');
+  final result = await login(input);
+  result.fold(
+    (l) => debugPrint('Error: ${l.toString()}'),
+    (data) => debugPrint('User: ${data.toMap()}'),
+  );
 }
 
 Future<void> getUserById(ParseServerAdapter httpClient) async {
