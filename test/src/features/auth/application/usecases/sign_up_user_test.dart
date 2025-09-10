@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:xlo_flutter_v2/src/core/errors/api_error.dart';
+import 'package:xlo_flutter_v2/src/core/errors/custom_argument_error.dart';
 import 'package:xlo_flutter_v2/src/core/utils/tables_keys.dart';
 import 'package:xlo_flutter_v2/src/features/auth/application/usecases/sign_up_user.dart';
 import 'package:xlo_flutter_v2/src/features/auth/domain/entities/sign_up_user.dart';
@@ -24,6 +25,15 @@ void main() {
     final result = (await signUp(user)).fold((l) => null, (r) => r);
 
     expect(result, unit);
+  });
+
+  test('should return a CustomArgumentError', () async {
+    final result = (await signUp(
+      SignUpEntity(email: '', name: '', password: '', phone: ''),
+    )).fold(id, id);
+
+    expect(result, isA<CustomArgumentError>());
+    expect((result as CustomArgumentError).exceptions.length, 12);
   });
 
   test('should return a ApiError', () async {

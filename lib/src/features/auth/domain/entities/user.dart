@@ -25,7 +25,7 @@ class User extends LucidValidator<User> {
       'name': name,
       'email': email,
       'phone': phone,
-      'type': type,
+      'type': type.name,
       'image': image,
     };
   }

@@ -61,9 +61,9 @@ class Ad extends LucidValidator<Ad> {
       'price': price,
       'views': views,
       'images': images,
-      'status': status.toMap(),
+      'status': status.name,
       'category': category.toMap(),
-      'owner': owner.toMap(),
+      'user': owner.toMap(),
       'hidePhone': hidePhone,
       'createdAt': createdAt?.millisecondsSinceEpoch,
     };

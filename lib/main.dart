@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
+import 'package:xlo_flutter_v2/src/core/errors/api_error.dart';
 import 'package:xlo_flutter_v2/src/core/errors/custom_argument_error.dart';
 import 'package:xlo_flutter_v2/src/core/http/parse_server_adapter.dart';
 import 'package:xlo_flutter_v2/src/core/utils/contants.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/usecases/get_all_categories.dart';
+import 'package:xlo_flutter_v2/src/features/ad/application/usecases/save_ad.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/usecases/save_category.dart';
+import 'package:xlo_flutter_v2/src/features/ad/domain/entities/ad.dart';
 import 'package:xlo_flutter_v2/src/features/ad/domain/entities/category.dart';
+import 'package:xlo_flutter_v2/src/features/ad/infra/gateway/ad_gateway_http.dart';
 import 'package:xlo_flutter_v2/src/features/ad/infra/gateway/category_gateway_http.dart';
 import 'package:xlo_flutter_v2/src/features/auth/application/usecases/get_user_by_id.dart';
 import 'package:xlo_flutter_v2/src/features/auth/application/usecases/login.dart';
 import 'package:xlo_flutter_v2/src/features/auth/application/usecases/sign_up_user.dart';
 import 'package:xlo_flutter_v2/src/features/auth/domain/entities/login.dart';
 import 'package:xlo_flutter_v2/src/features/auth/domain/entities/sign_up_user.dart';
+import 'package:xlo_flutter_v2/src/features/auth/domain/entities/user.dart';
 import 'package:xlo_flutter_v2/src/features/auth/infra/gateway/user_gateway_http.dart';
 
 void main() async {
@@ -21,9 +26,10 @@ void main() async {
   final httpClient = ParseServerAdapter();
 
   // await saveCategories(httpClient);
+  await saveAd(httpClient);
   // await signUpUser(httpClient);
   // await getUserById(httpClient);
-  await login(httpClient);
+  // await login(httpClient);
 
   runApp(const MyApp());
 }
@@ -85,6 +91,32 @@ Future<void> saveCategories(ParseServerAdapter httpClient) async {
       debugPrint('Category: ${category.description}, ID: ${category.id}');
     }),
   );
+}
+
+Future<void> saveAd(ParseServerAdapter httpClient) async {
+  final adGateway = AdGatewayHttp(httpClient);
+  final saveAd = SaveAd(adGateway);
+  final ad = Ad(
+    title: 'Ad Title 1',
+    description: 'Ad Description 1',
+    price: 100.0,
+    category: Category(id: '35UDuNGElA', description: 'Imóveis'),
+    images: [],
+    owner: User(
+      id: 'yUHeNHJAEe',
+      name: 'John Doe',
+      email: 'john.doe@gmail.com',
+      phone: '11999999999',
+    ),
+  );
+  final result = await saveAd(ad);
+  result.fold((l) {
+    if (l is CustomArgumentError) {
+      debugPrint(l.exceptions.first.message);
+    } else if (l is ApiError) {
+      debugPrint(l.message);
+    }
+  }, (r) => debugPrint('Ad saved succefully'));
 }
 
 Future<void> initializeParseServer() async {

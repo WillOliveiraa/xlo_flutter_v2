@@ -42,6 +42,19 @@ class ParseServerAdapter implements HttpClient {
     }
     final parseObject = ParseObject(url);
     for (final entry in data.entries) {
+      if (entry.value is Map) {
+        final itemTable = tableKeys.firstWhere((el) => el['id'] == entry.key);
+        if (itemTable['id'] != null && itemTable['id'] == 'user') {
+          final parseUser = await ParseUser.currentUser() as ParseUser;
+          parseObject.set(entry.key, parseUser);
+          continue;
+        }
+        parseObject.set(
+          itemTable['id']!,
+          ParseObject(itemTable['label']!)..set('objectId', entry.value['id']),
+        );
+        continue;
+      }
       parseObject.set(entry.key, entry.value);
     }
     final response = await parseObject.save();

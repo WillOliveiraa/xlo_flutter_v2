@@ -30,6 +30,17 @@ void main() {
     expect(result, isA<User>());
   });
 
+  test('should get an empty object (user not found)', () async {
+    // arrange
+    when(() => httpClient.get(any())).thenAnswer((_) async => Right([]));
+
+    // act
+    final result = (await getUserById(input)).fold((l) => null, (r) => r);
+
+    //assert
+    expect(result, isNull);
+  });
+
   test('should return a ApiError', () async {
     when(
       () => httpClient.get(any()),
