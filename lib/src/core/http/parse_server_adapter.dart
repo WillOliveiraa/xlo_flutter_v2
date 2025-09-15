@@ -3,15 +3,22 @@ import 'package:flutter/widgets.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:xlo_flutter_v2/src/core/errors/api_error.dart';
 import 'package:xlo_flutter_v2/src/core/errors/failure.dart';
+import 'package:xlo_flutter_v2/src/core/http/custom_query_builder.dart';
 import 'package:xlo_flutter_v2/src/core/utils/tables_keys.dart';
 
 import 'http_client.dart';
 
 class ParseServerAdapter implements HttpClient {
   @override
-  Future<Either<Failure, List<dynamic>>> get(String url) async {
-    if (url == keyUserTable) {
-      return await currentUser();
+  Future<Either<Failure, List<dynamic>>> get(
+    String url, {
+    CustomQueryBuilder? filters,
+  }) async {
+    switch (url) {
+      case keyUserTable:
+        return await currentUser();
+      case 'query':
+        return await query(filters);
     }
     final parseObject = ParseObject(url);
     final response = await parseObject.getAll();
@@ -112,5 +119,60 @@ class ParseServerAdapter implements HttpClient {
       return Right(convertedList);
     }
     return Left(ApiError(response?.error?.message ?? 'Unknown error'));
+  }
+
+  Future<Either<Failure, List<dynamic>>> query(
+    CustomQueryBuilder? filters,
+  ) async {
+    if (filters == null) return Right([]);
+    final queryBuilder = QueryBuilder(ParseObject(filters.tableName));
+    if (filters.hasIncludes) {
+      queryBuilder.includeObject(filters.includes!);
+    }
+    // queryBuilder.includeObject(['user', 'category']);
+    // queryBuilder.setAmountToSkip(page * 5);
+    // queryBuilder.setLimit(5);
+    // queryBuilder.whereEqualTo(keyAdStatus, AdStatus.active.index);
+    if (filters.orderBy != null) {
+      queryBuilder.orderByDescending(filters.orderBy!.orderByColumn!);
+    }
+    final response = await queryBuilder.query();
+    if (response.success && response.results != null) {
+      final convertedList = parseObjectToJson(
+        response.results as List<ParseObject>,
+      );
+      return Right(convertedList);
+    } else {
+      debugPrint(response.error?.message);
+      return Left(ApiError(response.error?.message ?? 'Unknown error'));
+    }
+  }
+
+  List<Map<String, dynamic>> parseObjectToJson(List<ParseObject> data) {
+    final List<Map<String, dynamic>> newData = [];
+    for (final item in data) {
+      final object = item.toJson(full: true);
+      for (final key in object.keys) {
+        if (object[key] is Map) {
+          final className = object[key]['className'];
+          if (className == 'ParseNumber') {
+            object[key] = object[key]['estimateNumber'];
+          } else if (className == 'ParseArray') {
+            object[key] = object[key]['estimatedArray'];
+          } else if (tableKeys
+              .firstWhere((el) => el['label'] == className)
+              .isNotEmpty) {
+            object[key]['id'] = object[key]['objectId'];
+            object[key].remove('objectId');
+            object[key].remove('className');
+          }
+        }
+      }
+      object['id'] = object['objectId'];
+      object.remove('objectId');
+      object.remove('className');
+      newData.add(object);
+    }
+    return newData;
   }
 }

@@ -12,7 +12,7 @@ final List<Map<String, dynamic>> adsMocks = [
     'category': categoriesMock[0],
     'owner': usersMock[0],
     'hidePhone': false,
-    'createdAt': 1633036800000,
+    'createdAt': '2025-09-07T13:13:58.279Z',
   },
   {
     'id': '2',
@@ -25,7 +25,7 @@ final List<Map<String, dynamic>> adsMocks = [
     'category': categoriesMock[2],
     'owner': usersMock[1],
     'hidePhone': true,
-    'createdAt': 1633123200000,
+    'createdAt': '2025-09-07T13:13:58.279Z',
   },
 ];
 

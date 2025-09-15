@@ -82,7 +82,7 @@ class Ad extends LucidValidator<Ad> {
         orElse: () => AdStatus.pending,
       ),
       category: Category.fromMap(map['category'] as Map<String, dynamic>),
-      owner: User.fromMap(map['owner'] as Map<String, dynamic>),
+      owner: User.fromMap(map['user'] as Map<String, dynamic>),
       hidePhone: map['hidePhone'] != null ? map['hidePhone'] as bool : null,
       createdAt:
           map['createdAt'] != null

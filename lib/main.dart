@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:xlo_flutter_v2/src/core/errors/api_error.dart';
 import 'package:xlo_flutter_v2/src/core/errors/custom_argument_error.dart';
+import 'package:xlo_flutter_v2/src/core/http/custom_query_builder.dart';
 import 'package:xlo_flutter_v2/src/core/http/parse_server_adapter.dart';
 import 'package:xlo_flutter_v2/src/core/utils/contants.dart';
+import 'package:xlo_flutter_v2/src/core/utils/tables_keys.dart';
+import 'package:xlo_flutter_v2/src/features/ad/application/query/get_all_ads.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/usecases/get_all_categories.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/usecases/save_ad.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/usecases/save_category.dart';
@@ -26,9 +29,10 @@ void main() async {
   final httpClient = ParseServerAdapter();
 
   // await saveCategories(httpClient);
-  await saveAd(httpClient);
+  // await saveAd(httpClient);
   // await signUpUser(httpClient);
   // await getUserById(httpClient);
+  await getAllAds(httpClient);
   // await login(httpClient);
 
   runApp(const MyApp());
@@ -53,6 +57,21 @@ Future<void> getUserById(ParseServerAdapter httpClient) async {
   result.fold(
     (l) => l,
     (data) => {if (data != null) debugPrint('User: ${data.toMap()}')},
+  );
+}
+
+Future<void> getAllAds(ParseServerAdapter httpClient) async {
+  final adGateway = AdGatewayHttp(httpClient);
+  final getAllAds = GetAllAds(adGateway);
+  final result = await getAllAds(
+    filters: CustomQueryBuilder(
+      tableName: keyAdTable,
+      includes: ['user', 'category'],
+    ),
+  );
+  result.fold(
+    (l) => l,
+    (data) => {for (final item in data) debugPrint('Ad: ${item.toMap()}')},
   );
 }
 
