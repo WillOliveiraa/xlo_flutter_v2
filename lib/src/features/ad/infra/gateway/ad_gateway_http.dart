@@ -29,4 +29,17 @@ class AdGatewayHttp implements AdGateway {
       return Right(ads);
     });
   }
+
+  @override
+  Future<Either<Failure, AdQuery?>> getById(
+    String id,
+    CustomQueryBuilder? filters,
+  ) async {
+    final response = await httpClient.get('query/$id', filters: filters);
+    return response.fold((failure) => Left(failure), (data) {
+      final ads =
+          data.map((e) => AdQuery.fromMap(e as Map<String, dynamic>)).toList();
+      return Right(ads.isEmpty ? null : ads.first);
+    });
+  }
 }

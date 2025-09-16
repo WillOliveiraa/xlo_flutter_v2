@@ -14,11 +14,11 @@ class ParseServerAdapter implements HttpClient {
     String url, {
     CustomQueryBuilder? filters,
   }) async {
-    switch (url) {
-      case keyUserTable:
-        return await currentUser();
-      case 'query':
-        return await query(filters);
+    if (url == keyUserTable) return await currentUser();
+    if (!url.contains('query/')) return await query(filters);
+    if (url.contains('query/')) {
+      final id = url.split('/');
+      return await query(filters, id: id[1]);
     }
     final parseObject = ParseObject(url);
     final response = await parseObject.getAll();
@@ -122,8 +122,9 @@ class ParseServerAdapter implements HttpClient {
   }
 
   Future<Either<Failure, List<dynamic>>> query(
-    CustomQueryBuilder? filters,
-  ) async {
+    CustomQueryBuilder? filters, {
+    String? id,
+  }) async {
     if (filters == null) return Right([]);
     final queryBuilder = QueryBuilder(ParseObject(filters.tableName));
     if (filters.hasIncludes) {
@@ -133,6 +134,9 @@ class ParseServerAdapter implements HttpClient {
     // queryBuilder.setAmountToSkip(page * 5);
     // queryBuilder.setLimit(5);
     // queryBuilder.whereEqualTo(keyAdStatus, AdStatus.active.index);
+    if (id != null) {
+      queryBuilder.whereEqualTo('objectId', id);
+    }
     if (filters.orderBy != null) {
       queryBuilder.orderByDescending(filters.orderBy!.orderByColumn!);
     }
