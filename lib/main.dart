@@ -4,6 +4,7 @@ import 'package:xlo_flutter_v2/src/core/errors/api_error.dart';
 import 'package:xlo_flutter_v2/src/core/errors/custom_argument_error.dart';
 import 'package:xlo_flutter_v2/src/core/http/custom_query_builder.dart';
 import 'package:xlo_flutter_v2/src/core/http/parse_server_adapter.dart';
+import 'package:xlo_flutter_v2/src/core/theme/app_colors.dart';
 import 'package:xlo_flutter_v2/src/core/utils/contants.dart';
 import 'package:xlo_flutter_v2/src/core/utils/tables_keys.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/query/get_ad_by_id.dart';
@@ -22,18 +23,20 @@ import 'package:xlo_flutter_v2/src/features/auth/domain/entities/login.dart';
 import 'package:xlo_flutter_v2/src/features/auth/domain/entities/sign_up_user.dart';
 import 'package:xlo_flutter_v2/src/features/auth/domain/entities/user.dart';
 import 'package:xlo_flutter_v2/src/features/auth/infra/gateway/user_gateway_http.dart';
+import 'package:xlo_flutter_v2/src/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:xlo_flutter_v2/src/features/dashboard/presentation/pages/test_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeParseServer();
 
-  final httpClient = ParseServerAdapter();
+  // final httpClient = ParseServerAdapter();
 
   // await saveCategories(httpClient);
   // await saveAd(httpClient);
   // await signUpUser(httpClient);
   // await getUserById(httpClient);
-  await getAdById(httpClient);
+  // await getAdById(httpClient);
   // await getAllAds(httpClient);
   // await login(httpClient);
 
@@ -172,11 +175,38 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: appName,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        fontFamily: 'NotoSans',
+        primaryColor: AppColors.primary,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.primary,
+          primary: AppColors.primary,
+          secondary: AppColors.secondary,
+        ),
       ),
-      home: Scaffold(body: Center(child: Text('Flutter Demo Home Page'))),
+      initialRoute: '/dashboard',
+      routes: {
+        '/dashboard': (context) => const DashboardPage(),
+        '/test': (context) => const TestPage(),
+      },
+      // home: Scaffold(
+      //   body: Center(
+      //     child: Column(
+      //       children: [
+      //         Text('Flutter Demo Home Page', style: TextStyle(fontSize: 20)),
+      //         Text(
+      //           'Flutter Demo Home Page',
+      //           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      //         ),
+      //         Text(
+      //           'Flutter Demo Home Page',
+      //           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 }
