@@ -1,9 +1,9 @@
 import 'package:command_it/command_it.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:xlo_flutter_v2/src/core/errors/api_error.dart';
-import 'package:xlo_flutter_v2/src/core/http/parse_server_adapter.dart';
+import 'package:xlo_flutter_v2/src/core/routers/routers.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/query/types/ad_query.dart';
-import 'package:xlo_flutter_v2/src/features/ad/infra/gateway/ad_gateway_http.dart';
 import 'package:xlo_flutter_v2/src/features/dashboard/presentation/viewmodels/dashboard_viewmodel.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -14,20 +14,11 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  final httpClient = ParseServerAdapter();
-  late final AdGatewayHttp adGateway;
-  late final DashboardViewmodel dashboardView;
-
-  @override
-  void initState() {
-    super.initState();
-    adGateway = AdGatewayHttp(httpClient);
-    dashboardView = DashboardViewmodel(adGateway);
-    // dashboardView.getAllAdsCommand.executeWithFuture();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final dashboardView = context.read<DashboardViewmodel>();
+    // final dashboardView = DashboardViewmodel(adGateway);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Dashboard')),
       body: Column(
@@ -40,8 +31,8 @@ class _DashboardPageState extends State<DashboardPage> {
               if (result.isExecuting) {
                 return Center(
                   child: SizedBox(
-                    width: 50.0,
-                    height: 50.0,
+                    width: 30.0,
+                    height: 30.0,
                     child: CircularProgressIndicator(),
                   ),
                 );
@@ -51,7 +42,6 @@ class _DashboardPageState extends State<DashboardPage> {
                   return Text('Error: ${(result.error as ApiError).message}');
                 }
               }
-
               if (result.hasData) {
                 return Expanded(
                   child: ListView.builder(
@@ -74,50 +64,12 @@ class _DashboardPageState extends State<DashboardPage> {
               return Text('No data available.');
             },
           ),
-          // ListenableBuilder(
-          //   listenable: dashboardView.getAllAdsCommand,
-          //   builder: (context, child) {
-          //     return Expanded(
-          //       child: ListView.builder(
-          //         itemCount: dashboardView.ads.length,
-          //         itemBuilder: (context, index) {
-          //           final ad = dashboardView.ads[index];
-          //           return ListTile(
-          //             title: Text(ad.title ?? 'No Title'),
-          //             subtitle: Text(ad.category?.description ?? 'No Category'),
-          //             onTap: () {
-          //               Navigator.of(context).pushNamed('/test');
-          //             },
-          //           );
-          //         },
-          //       ),
-          //     );
-          //   },
-          // ),
-          // ListenableBuilder(
-          //   listenable: dashboardView.getAllAdsCommand,
-          //   builder: (context, child) {
-          //     if (dashboardView.getAllAdsCommand.isFailure) {
-          //       return Text('Error: teste');
-          //     }
-          //     return Expanded(
-          //       child: ListView.builder(
-          //         itemCount: dashboardView.ads.length,
-          //         itemBuilder: (context, index) {
-          //           final ad = dashboardView.ads[index];
-          //           return ListTile(
-          //             title: Text(ad.title ?? 'No Title'),
-          //             subtitle: Text(ad.category?.description ?? 'No Category'),
-          //             onTap: () {
-          //               Navigator.of(context).pushNamed('/test');
-          //             },
-          //           );
-          //         },
-          //       ),
-          //     );
-          //   },
-          // ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.of(context).pushNamed(Routers.login),
+        tooltip: 'Login',
+        child: const Icon(Icons.person),
       ),
     );
   }

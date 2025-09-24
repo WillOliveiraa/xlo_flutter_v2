@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:xlo_flutter_v2/src/core/errors/failure.dart';
-import 'package:xlo_flutter_v2/src/features/auth/domain/entities/login.dart';
+import 'package:xlo_flutter_v2/src/features/auth/domain/entities/login_input.dart';
 import 'package:xlo_flutter_v2/src/features/auth/domain/entities/sign_up_user.dart';
 import 'package:xlo_flutter_v2/src/features/auth/domain/entities/user.dart';
 

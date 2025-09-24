@@ -6,7 +6,7 @@ import 'package:xlo_flutter_v2/src/core/errors/custom_argument_error.dart';
 import 'package:xlo_flutter_v2/src/core/utils/tables_keys.dart';
 import 'package:xlo_flutter_v2/src/features/auth/application/usecases/login.dart';
 import 'package:xlo_flutter_v2/src/features/auth/domain/entities/enum/user_type.dart';
-import 'package:xlo_flutter_v2/src/features/auth/domain/entities/login.dart';
+import 'package:xlo_flutter_v2/src/features/auth/domain/entities/login_input.dart';
 import 'package:xlo_flutter_v2/src/features/auth/domain/entities/user.dart';
 import 'package:xlo_flutter_v2/src/features/auth/infra/gateway/user_gateway_http.dart';
 
@@ -18,8 +18,8 @@ void main() {
   final userGateway = UserGatewayHttp(httpClient);
   final login = Login(userGateway);
   final input = LoginInput(
-    usersMock.first['email'],
-    usersMock.first['password'],
+    email: usersMock.first['email'],
+    password: usersMock.first['password'],
   );
 
   test('should log in user', () async {
@@ -39,7 +39,9 @@ void main() {
   });
 
   test('should return a CustomArgumentError', () async {
-    final result = (await login(LoginInput('', ''))).fold(id, id);
+    final result = (await login(
+      LoginInput(email: '', password: ''),
+    )).fold(id, id);
 
     expect(result, isA<CustomArgumentError>());
     expect((result as CustomArgumentError).exceptions.length, 4);

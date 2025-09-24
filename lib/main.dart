@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:xlo_flutter_v2/src/app_initialization.dart';
 import 'package:xlo_flutter_v2/src/core/errors/api_error.dart';
 import 'package:xlo_flutter_v2/src/core/errors/custom_argument_error.dart';
 import 'package:xlo_flutter_v2/src/core/http/custom_query_builder.dart';
 import 'package:xlo_flutter_v2/src/core/http/parse_server_adapter.dart';
-import 'package:xlo_flutter_v2/src/core/theme/app_colors.dart';
+import 'package:xlo_flutter_v2/src/core/routers/routers.dart';
+import 'package:xlo_flutter_v2/src/core/theme/theme.dart';
 import 'package:xlo_flutter_v2/src/core/utils/contants.dart';
 import 'package:xlo_flutter_v2/src/core/utils/tables_keys.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/query/get_ad_by_id.dart';
@@ -19,12 +22,10 @@ import 'package:xlo_flutter_v2/src/features/ad/infra/gateway/category_gateway_ht
 import 'package:xlo_flutter_v2/src/features/auth/application/usecases/get_user_by_id.dart';
 import 'package:xlo_flutter_v2/src/features/auth/application/usecases/login.dart';
 import 'package:xlo_flutter_v2/src/features/auth/application/usecases/sign_up_user.dart';
-import 'package:xlo_flutter_v2/src/features/auth/domain/entities/login.dart';
+import 'package:xlo_flutter_v2/src/features/auth/domain/entities/login_input.dart';
 import 'package:xlo_flutter_v2/src/features/auth/domain/entities/sign_up_user.dart';
 import 'package:xlo_flutter_v2/src/features/auth/domain/entities/user.dart';
 import 'package:xlo_flutter_v2/src/features/auth/infra/gateway/user_gateway_http.dart';
-import 'package:xlo_flutter_v2/src/features/dashboard/presentation/pages/dashboard_page.dart';
-import 'package:xlo_flutter_v2/src/features/dashboard/presentation/pages/test_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,7 +47,10 @@ void main() async {
 Future<void> login(ParseServerAdapter httpClient) async {
   final userGateway = UserGatewayHttp(httpClient);
   final login = Login(userGateway);
-  final input = LoginInput('john.doe@gmail.com', 'Password123@');
+  final input = LoginInput(
+    email: 'john.doe@gmail.com',
+    password: 'Password123@',
+  );
   final result = await login(input);
   result.fold(
     (l) => debugPrint('Error: ${l.toString()}'),
@@ -174,39 +178,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: appName,
-      theme: ThemeData(
-        fontFamily: 'NotoSans',
-        primaryColor: AppColors.primary,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.primary,
-          primary: AppColors.primary,
-          secondary: AppColors.secondary,
-        ),
+    return MultiProvider(
+      providers: AppInitialization().initializeInjectDependencies(),
+      child: MaterialApp(
+        title: appName,
+        theme: appTheme,
+        initialRoute: Routers.dashboard,
+        routes: routes,
       ),
-      initialRoute: '/dashboard',
-      routes: {
-        '/dashboard': (context) => const DashboardPage(),
-        '/test': (context) => const TestPage(),
-      },
-      // home: Scaffold(
-      //   body: Center(
-      //     child: Column(
-      //       children: [
-      //         Text('Flutter Demo Home Page', style: TextStyle(fontSize: 20)),
-      //         Text(
-      //           'Flutter Demo Home Page',
-      //           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      //         ),
-      //         Text(
-      //           'Flutter Demo Home Page',
-      //           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
-      //         ),
-      //       ],
-      //     ),
-      //   ),
-      // ),
     );
   }
 }
