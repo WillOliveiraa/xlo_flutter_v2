@@ -17,7 +17,6 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     final dashboardView = context.read<DashboardViewmodel>();
-    // final dashboardView = DashboardViewmodel(adGateway);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Dashboard')),

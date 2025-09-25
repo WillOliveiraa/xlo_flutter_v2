@@ -182,7 +182,7 @@ class MyApp extends StatelessWidget {
       providers: AppInitialization().initializeInjectDependencies(),
       child: MaterialApp(
         title: appName,
-        theme: appTheme,
+        theme: AppTheme(context).buildAppTheme(),
         initialRoute: Routers.dashboard,
         routes: routes,
       ),

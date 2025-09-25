@@ -38,3 +38,20 @@ flutter:
           weight: 700
         - asset: assets/fonts/notoSans/NotoSans-Light.ttf
           weight: 300
+
+    - family: ComicNeue
+      fonts:
+        - asset: assets/fonts/comic/ComicNeue-Regular.ttf
+        - asset: assets/fonts/comic/ComicNeue-Bold.ttf
+          # weight: 700
+        - asset: assets/fonts/comic/ComicNeue-Light.ttf
+          # weight: 300
+
+    - family: SF Pro Text
+      fonts:
+        - asset: assets/fonts/SfProText/SF-Pro-Text-Regular.otf
+        - asset: assets/fonts/SfProText/SF-Pro-Text-Bold.otf
+        - asset: assets/fonts/SfProText/SF-Pro-Text-Semibold.otf
+        - asset: assets/fonts/SfProText/SF-Pro-Text-Light.otf
+        - asset: assets/fonts/SfProText/SF-Pro-Text-Ultralight.otf
+        - asset: assets/fonts/SfProText/SF-Pro-Text-Thin.otf
