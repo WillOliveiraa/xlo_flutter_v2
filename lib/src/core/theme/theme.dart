@@ -18,12 +18,33 @@ class AppTheme {
         primary: AppColors.primaryColor,
         secondary: AppColors.secondaryColor,
       ),
+      scaffoldBackgroundColor: AppColors.secondaryBackground,
       appBarTheme: _appBarTheme(),
       inputDecorationTheme: _inputDecorationTheme(),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: _outlineButtonStyle(),
       ),
       textTheme: textTheme,
+      actionIconTheme: _actionIconThemeData(),
+    );
+  }
+
+  ActionIconThemeData _actionIconThemeData() {
+    return ActionIconThemeData(
+      backButtonIconBuilder:
+          (context) => Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppColors.lightGray,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.arrow_back_ios_sharp,
+              color: AppColors.primaryText,
+              size: 20,
+            ),
+          ),
     );
   }
 
@@ -85,15 +106,15 @@ class AppTheme {
 
   AppBarTheme _appBarTheme() {
     return AppBarTheme(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: AppColors.secondaryBackground,
       elevation: 0,
-      iconTheme: IconThemeData(color: Colors.white),
-      centerTitle: true,
+      iconTheme: IconThemeData(color: AppColors.primaryText),
+      centerTitle: false,
       titleTextStyle: const TextStyle(
         fontFamily: fontFamily,
-        color: Colors.white,
-        fontSize: 18,
-        fontWeight: FontWeight.w500,
+        color: AppColors.primaryText,
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
       ),
     );
   }

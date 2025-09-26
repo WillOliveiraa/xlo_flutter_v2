@@ -6,11 +6,16 @@ import 'package:xlo_flutter_v2/src/features/auth/domain/entities/user.dart';
 class LoginViewmodel {
   final Login _loginUsecase;
   late final Command<LoginInput, User?> loginCommand;
+  late Command<bool, bool> passwordVisibility;
 
   LoginViewmodel(this._loginUsecase) {
     loginCommand = Command.createAsync<LoginInput, User?>(
       _login,
       initialValue: null,
+    );
+    passwordVisibility = Command.createSync(
+      setPasswordVisibility,
+      initialValue: false,
     );
   }
 
@@ -19,4 +24,6 @@ class LoginViewmodel {
     await Future.delayed(const Duration(seconds: 2));
     return result.fold((l) => throw l, (data) => data);
   }
+
+  bool setPasswordVisibility(bool value) => value;
 }
