@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xlo_flutter_v2/src/core/theme/text_theme.dart';
 import 'package:xlo_flutter_v2/src/core/utils/contants.dart';
+import 'package:xlo_flutter_v2/src/core/widgets/ds_icon_button.dart';
 
 import './app_colors.dart';
 
@@ -32,13 +33,7 @@ class AppTheme {
   ActionIconThemeData _actionIconThemeData() {
     return ActionIconThemeData(
       backButtonIconBuilder:
-          (context) => Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.lightGray,
-              shape: BoxShape.circle,
-            ),
+          (context) => DSIconButton(
             child: Icon(
               Icons.arrow_back_ios_sharp,
               color: AppColors.primaryText,
