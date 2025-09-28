@@ -1,3 +1,4 @@
+import 'package:xlo_flutter_v2/src/features/ad/presentation/pages/ad_page.dart';
 import 'package:xlo_flutter_v2/src/features/auth/presentation/pages/login_page.dart';
 import 'package:xlo_flutter_v2/src/features/auth/presentation/pages/sign_up_page.dart';
 import 'package:xlo_flutter_v2/src/features/dashboard/presentation/pages/dashboard_page.dart';
@@ -16,4 +17,5 @@ final routes = {
   Routers.test: (context) => const TestPage(),
   Routers.login: (context) => const LoginPage(),
   Routers.signUp: (context) => const SignUpPage(),
+  Routers.ad: (context) => const AdPage(),
 };

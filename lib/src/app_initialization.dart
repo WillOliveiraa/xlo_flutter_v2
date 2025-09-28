@@ -2,7 +2,9 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:xlo_flutter_v2/src/core/http/parse_server_adapter.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/query/get_all_ads.dart';
+import 'package:xlo_flutter_v2/src/features/ad/application/usecases/save_ad.dart';
 import 'package:xlo_flutter_v2/src/features/ad/infra/gateway/ad_gateway_http.dart';
+import 'package:xlo_flutter_v2/src/features/ad/presentation/viewmodels/ad_viewmodel.dart';
 import 'package:xlo_flutter_v2/src/features/auth/application/usecases/login.dart';
 import 'package:xlo_flutter_v2/src/features/auth/application/usecases/sign_up_user.dart';
 import 'package:xlo_flutter_v2/src/features/auth/infra/gateway/user_gateway_http.dart';
@@ -32,26 +34,44 @@ class AppInitialization {
         create:
             (context) => UserGatewayHttp(context.read<ParseServerAdapter>()),
       ),
+      ..._initializeAuth(),
+      ..._initializeAd(),
+    ];
+  }
 
+  List<SingleChildWidget> _initializeAuth() {
+    return [
       /*
         USECASES
       */
-      Provider(create: (context) => GetAllAds(context.read<AdGatewayHttp>())),
       Provider(create: (context) => Login(context.read<UserGatewayHttp>())),
       Provider(
         create: (context) => SignUpUser(context.read<UserGatewayHttp>()),
       ),
+      /*
+        VIEWMODELS
+      */
+      Provider(create: (context) => LoginViewmodel(context.read<Login>())),
+      Provider(
+        create: (context) => SignUpViewmodel(context.read<SignUpUser>()),
+      ),
+    ];
+  }
 
+  List<SingleChildWidget> _initializeAd() {
+    return [
+      /*
+        USECASES
+      */
+      Provider(create: (context) => GetAllAds(context.read<AdGatewayHttp>())),
+      Provider(create: (context) => SaveAd(context.read<AdGatewayHttp>())),
       /*
         VIEWMODELS
       */
       Provider(
         create: (context) => DashboardViewmodel(context.read<GetAllAds>()),
       ),
-      Provider(create: (context) => LoginViewmodel(context.read<Login>())),
-      Provider(
-        create: (context) => SignUpViewmodel(context.read<SignUpUser>()),
-      ),
+      Provider(create: (context) => AdViewmodel(context.read<SaveAd>())),
     ];
   }
 }

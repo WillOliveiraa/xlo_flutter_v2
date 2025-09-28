@@ -12,46 +12,96 @@ extension AdStatusExtension on AdStatus {
 }
 
 class Ad extends LucidValidator<Ad> {
-  final String? id;
-  final String title;
-  final String description;
-  final num price;
-  final int? views;
-  final List<String> images;
-  final AdStatus status;
-  final Category category;
-  final User owner;
-  final bool? hidePhone;
-  final DateTime? createdAt;
+  late String? _id;
+  late String _title;
+  late String _description;
+  late num _price;
+  late int? _views;
+  late List<String> _images;
+  late AdStatus _status;
+  late Category _category;
+  late User _owner;
+  late bool? _hidePhone;
+  late DateTime? _createdAt;
+
+  String? get id => _id;
+
+  void setId(final id) => _id = id;
+
+  String get title => _title;
+
+  void setTitle(title) => _title = title;
+
+  String get description => _description;
+
+  void setDescription(description) => _description = description;
+
+  num get price => _price;
+
+  void setPrice(price) => _price = price;
+
+  int? get views => _views;
+
+  void setViews(views) => _views = views;
+
+  List<String> get images => _images;
+
+  void setImages(images) => _images = images;
+
+  AdStatus get status => _status;
+
+  void setStatus(status) => _status = status;
+
+  Category get category => _category;
+
+  void setCategory(category) => _category = category;
+
+  User get owner => _owner;
+
+  void setOwner(owner) => _owner = owner;
+
+  bool? get hidePhone => _hidePhone;
+
+  void setHidePhone(hidePhone) => _hidePhone = hidePhone;
+
+  DateTime? get createdAt => _createdAt;
+
+  void setCreatedAt(createdAt) => _createdAt = createdAt;
 
   Ad({
-    this.id,
-    required this.title,
-    required this.description,
-    required this.price,
-    this.views,
-    required this.images,
-    this.status = AdStatus.pending,
-    required this.category,
-    required this.owner,
-    this.hidePhone,
-    this.createdAt,
+    String? id,
+    required String title,
+    required String description,
+    required num price,
+    int? views,
+    required List<String> images,
+    AdStatus status = AdStatus.pending,
+    required Category category,
+    required User owner,
+    bool? hidePhone,
+    DateTime? createdAt,
   }) {
-    ruleFor(
-      (ad) => ad.title.trim(),
-      key: 'title',
-    ).notEmpty(message: 'Title is required');
-    ruleFor((ad) => ad.description.trim(), key: 'description')
-        .notEmpty(message: 'Description is required')
-        .minLength(
-          10,
-          message: 'Description must be at least 10 characters long',
-        );
-    ruleFor(
-      (ad) => ad.price,
-      key: 'price',
-    ).greaterThan(0, message: 'Price must be greater than 0');
+    _id = id;
+    _title = title;
+    _description = description;
+    _price = price;
+    _views = views;
+    _images = images;
+    _status = status;
+    _category = category;
+    _owner = owner;
+    _hidePhone = hidePhone;
+    _createdAt = createdAt;
   }
+
+  factory Ad.empty() => Ad(
+    title: '',
+    description: '',
+    price: 0,
+    images: [],
+    category: Category(description: ''),
+    owner: User(id: '', name: '', email: '', phone: ''),
+  );
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -89,5 +139,24 @@ class Ad extends LucidValidator<Ad> {
               ? DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int)
               : null,
     );
+  }
+}
+
+class AdValidator extends LucidValidator<Ad> {
+  AdValidator() {
+    ruleFor(
+      (ad) => ad.title.trim(),
+      key: 'title',
+    ).notEmpty(message: 'Title is required');
+    ruleFor((ad) => ad.description.trim(), key: 'description')
+        .notEmpty(message: 'Description is required')
+        .minLength(
+          10,
+          message: 'Description must be at least 10 characters long',
+        );
+    ruleFor(
+      (ad) => ad.price,
+      key: 'price',
+    ).greaterThan(0, message: 'Price must be greater than 0');
   }
 }
