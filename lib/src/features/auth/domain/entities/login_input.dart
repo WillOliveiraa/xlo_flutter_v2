@@ -1,6 +1,6 @@
 import 'package:lucid_validation/lucid_validation.dart';
 
-class LoginInput extends LucidValidator<LoginInput> {
+class LoginInput extends LoginInputValidator {
   late String _email;
   late String _password;
 

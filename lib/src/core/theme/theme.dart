@@ -64,12 +64,10 @@ class AppTheme {
       fontWeight: FontWeight.normal,
     );
 
-    TextStyle errorStyle = TextTheme.of(context).bodyMedium!.copyWith(
+    TextStyle errorStyle = TextTheme.of(context).bodySmall!.copyWith(
       fontFamily: fontFamily,
       color: AppColors.error,
-      fontSize: 15,
       letterSpacing: 0.0,
-      // lineHeight: 1.2,
     );
 
     OutlineInputBorder enabledBorder = OutlineInputBorder(

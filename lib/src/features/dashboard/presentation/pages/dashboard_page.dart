@@ -53,7 +53,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           ad.category?.description ?? 'No Category',
                         ),
                         onTap: () {
-                          Navigator.of(context).pushNamed('/test');
+                          Navigator.of(context).pushNamed(Routers.test);
                         },
                       );
                     },
