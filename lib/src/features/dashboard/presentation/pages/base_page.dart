@@ -20,7 +20,7 @@ class _BasePageState extends State<BasePage> {
       appBar: AppBar(title: const Text('Chat')),
       body: Container(color: Colors.red),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).pushNamed(Routers.login),
+        onPressed: () => Navigator.of(context).pushNamed(Routers.test),
         tooltip: 'Login',
         child: const Icon(Icons.person),
       ),
@@ -56,9 +56,11 @@ class _BasePageState extends State<BasePage> {
 
   @override
   Widget build(BuildContext context) {
+    final Widget currentPage = _pages[currentPageIndex];
     return Scaffold(
-      body: _pages[currentPageIndex],
+      body: currentPage,
       bottomNavigationBar: NavigationBar(
+        height: 55,
         destinations: _destinations,
         onDestinationSelected:
             (value) => setState(() => currentPageIndex = value),

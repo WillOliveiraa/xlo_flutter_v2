@@ -6,6 +6,7 @@ class ProductContainer extends StatelessWidget {
   final String title;
   final String price;
   final VoidCallback? onTap;
+  final VoidCallback? onTapFavorite;
   final bool isFavorite;
 
   const ProductContainer({
@@ -14,15 +15,18 @@ class ProductContainer extends StatelessWidget {
     required this.title,
     required this.price,
     this.onTap,
+    this.onTapFavorite,
     this.isFavorite = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      height: 200,
+      width: 200,
       decoration: BoxDecoration(
         color: AppColors.secondaryBackground,
+        borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
             blurRadius: 3,
@@ -31,96 +35,110 @@ class ProductContainer extends StatelessWidget {
             spreadRadius: 0,
           ),
         ],
-        borderRadius: BorderRadius.circular(8),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          Stack(
-            alignment: AlignmentDirectional(1, -1),
-            children: [
-              Align(
-                alignment: AlignmentDirectional(0, -1),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(0),
-                    bottomRight: Radius.circular(0),
-                    topLeft: Radius.circular(8),
-                    topRight: Radius.circular(8),
-                  ),
-                  child: Image.network(
-                    image,
-                    width: double.infinity,
-                    height: 113,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 12, 12, 0),
-                child: Container(
-                  width: 24,
-                  height: 24,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Stack(
+              children: [
+                Image.network(image, width: double.infinity, fit: BoxFit.cover),
+                Container(
                   decoration: BoxDecoration(
-                    color: AppColors.secondaryBackground,
-                    shape: BoxShape.circle,
-                  ),
-                  child: InkWell(
-                    splashColor: Colors.transparent,
-                    focusColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onTap: onTap,
-                    child: Builder(
-                      builder: (context) {
-                        if (isFavorite) {
-                          return Icon(
-                            Icons.favorite,
-                            color: AppColors.error,
-                            size: 16,
-                          );
-                        } else {
-                          return Icon(
-                            Icons.favorite_border,
-                            color: AppColors.primaryText,
-                            size: 16,
-                          );
-                        }
-                      },
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        const Color(0xFF343434).withOpacity(0.4),
+                        const Color(0xFF343434).withOpacity(0.15),
+                      ],
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Flexible(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(12, 0, 8, 0),
-                  child: Text(
-                    title,
-                    maxLines: 1,
-                    style: TextTheme.of(context).bodySmall,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
-                  child: Text(
-                    price,
-                    maxLines: 1,
-                    style: TextTheme.of(context).bodyMedium,
+                Positioned(
+                  bottom: 0,
+                  child: Container(
+                    height: 50,
+                    width: 200,
+                    color: AppColors.secondaryBackground,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(12, 0, 8, 0),
+                          child: Text(
+                            title,
+                            maxLines: 1,
+                            style: TextTheme.of(context).bodySmall,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(12, 4, 0, 0),
+                          child: Text(
+                            price,
+                            maxLines: 1,
+                            style: TextTheme.of(context).bodyMedium,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
           ),
+          Positioned.fill(
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(8),
+                onTap: onTap,
+              ),
+            ),
+          ),
+          FavoriteButton(onTapFavorite: onTapFavorite, isFavorite: isFavorite),
         ],
+      ),
+    );
+    // FavoriteButton(onTapFavorite: onTapFavorite, isFavorite: isFavorite),
+  }
+}
+
+class FavoriteButton extends StatelessWidget {
+  const FavoriteButton({
+    super.key,
+    required this.onTapFavorite,
+    required this.isFavorite,
+  });
+
+  final VoidCallback? onTapFavorite;
+  final bool isFavorite;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: 8,
+      right: 8,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          customBorder: CircleBorder(),
+          onTap: onTapFavorite,
+          child: Ink(
+            width: 28,
+            height: 28,
+            decoration: BoxDecoration(
+              color: AppColors.secondaryBackground,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: isFavorite ? AppColors.error : AppColors.primaryText,
+              size: 16,
+            ),
+          ),
+        ),
       ),
     );
   }

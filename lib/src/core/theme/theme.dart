@@ -33,13 +33,8 @@ class AppTheme {
   ActionIconThemeData _actionIconThemeData() {
     return ActionIconThemeData(
       backButtonIconBuilder:
-          (context) => DSIconButton(
-            child: Icon(
-              Icons.arrow_back_ios_sharp,
-              color: AppColors.primaryText,
-              size: 20,
-            ),
-          ),
+          (context) =>
+              DSIconButton(icon: Icons.arrow_back_ios_sharp, iconSize: 20),
     );
   }
 

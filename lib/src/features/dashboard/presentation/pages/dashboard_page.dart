@@ -1,12 +1,11 @@
-import 'package:command_it/command_it.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xlo_flutter_v2/src/core/errors/api_error.dart';
-import 'package:xlo_flutter_v2/src/core/routers/routers.dart';
-import 'package:xlo_flutter_v2/src/core/theme/app_colors.dart';
+import 'package:xlo_flutter_v2/src/core/widgets/category_container.dart';
+import 'package:xlo_flutter_v2/src/core/widgets/custom_banner.dart';
 import 'package:xlo_flutter_v2/src/core/widgets/ds_icon_button.dart';
 import 'package:xlo_flutter_v2/src/core/widgets/product_container.dart';
-import 'package:xlo_flutter_v2/src/features/ad/application/query/types/ad_query.dart';
+import 'package:xlo_flutter_v2/src/core/widgets/search_container.dart';
+import 'package:xlo_flutter_v2/src/core/widgets/title_container.dart';
 import 'package:xlo_flutter_v2/src/features/dashboard/presentation/viewmodels/dashboard_viewmodel.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -39,6 +38,13 @@ class _DashboardPageState extends State<DashboardPage> {
       'favorite': false,
     },
   ];
+  final List<Map<String, dynamic>> _categories = [
+    {'title': 'Car', 'icon': Icons.car_repair},
+    {'title': 'Motocycle', 'icon': Icons.motorcycle_sharp},
+    {'title': 'Bike', 'icon': Icons.pedal_bike},
+    {'title': 'PC', 'icon': Icons.computer},
+    {'title': 'Mobile', 'icon': Icons.phone_iphone},
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -49,88 +55,149 @@ class _DashboardPageState extends State<DashboardPage> {
         title: const Text('Dashboard'),
         actions: [
           DSIconButton(
-            child: Icon(
-              Icons.notifications_outlined,
-              color: AppColors.primaryText,
-              size: 20,
-            ),
+            icon: Icons.notifications_outlined,
+            iconSize: 20,
+            onTap: () {},
           ),
           SizedBox(width: 16),
-          DSIconButton(child: Icon(Icons.shopping_bag_outlined, size: 24)),
+          DSIconButton(
+            icon: Icons.shopping_bag_outlined,
+            iconSize: 24,
+            onTap: () {},
+          ),
           SizedBox(width: 16),
         ],
       ),
       body: Column(
         children: [
-          SizedBox(
-            height: 200,
-            child: ListView.separated(
-              itemCount: _products.length,
-              scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              separatorBuilder: (context, index) => SizedBox(width: 16),
-              itemBuilder: (context, index) {
-                final item = _products[index];
+          SearchContainer(),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: 16),
+                  CustomBanner(
+                    imageUrl:
+                        'https://images.pexels.com/photos/5650023/pexels-photo-5650023.jpeg',
+                    title: 'Friday Sale',
+                    subtitle: 'Up to 30% Off',
+                    onTap: () {},
+                  ),
+                  TitleContainer(title: 'Categories', onTap: () {}),
+                  SizedBox(
+                    // color: Colors.amberAccent,
+                    height: 150,
+                    child: ListView.separated(
+                      separatorBuilder: (context, index) => SizedBox(width: 16),
+                      itemCount: _categories.length,
+                      scrollDirection: Axis.horizontal,
+                      physics: BouncingScrollPhysics(),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
+                      itemBuilder: (context, index) {
+                        final item = _categories[index];
+                        return CategoryContainer(
+                          icon: item['icon'],
+                          title: item['title'],
+                          onTap: () {
+                            debugPrint(item['title']);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  TitleContainer(
+                    title: 'Just for you',
+                    padding: EdgeInsetsDirectional.symmetric(horizontal: 16),
+                    onTap: () {},
+                  ),
+                  SizedBox(
+                    height: 200,
+                    child: ListView.separated(
+                      itemCount: _products.length,
+                      scrollDirection: Axis.horizontal,
+                      physics: BouncingScrollPhysics(),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
+                      separatorBuilder: (context, index) => SizedBox(width: 16),
+                      itemBuilder: (context, index) {
+                        final item = _products[index];
 
-                return SizedBox(
-                  height: 170,
-                  width: 180,
-                  child: ProductContainer(
-                    image: item['image'],
-                    title: item['title'],
-                    price: item['price'],
-                    isFavorite: item['favorite'],
-                    onTap: () {
-                      debugPrint('test');
-                    },
+                        return ProductContainer(
+                          image: item['image'],
+                          title: item['title'],
+                          price: item['price'],
+                          isFavorite: item['favorite'],
+                          onTap: () {
+                            debugPrint(item['title']);
+                          },
+                          onTapFavorite: () {
+                            debugPrint('Favorite: ${item['title']}');
+                          },
+                        );
+                      },
+                    ),
                   ),
-                );
-              },
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          ValueListenableBuilder<CommandResult<void, List<AdQuery>>>(
-            valueListenable: dashboardView.getAllAdsCommand.results,
-            builder: (context, result, _) {
-              if (result.isExecuting) {
-                return Center(
-                  child: SizedBox(
-                    width: 30.0,
-                    height: 30.0,
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-              if (result.hasError) {
-                if (result.error is ApiError) {
-                  return Text('Error: ${(result.error as ApiError).message}');
-                }
-              }
-              if (result.hasData) {
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: result.data?.length,
-                    itemBuilder: (context, index) {
-                      final ad = result.data![index];
-                      return ListTile(
-                        title: Text(ad.title ?? 'No Title'),
-                        subtitle: Text(
-                          ad.category?.description ?? 'No Category',
-                        ),
-                        onTap: () {
-                          Navigator.of(context).pushNamed(Routers.test);
-                        },
-                      );
-                    },
-                  ),
-                );
-              }
-              return Text('No data available.');
-            },
           ),
         ],
       ),
     );
   }
+
+  // Container(
+  //   height: 200,
+  //   color: Colors.blueGrey,
+  //   child: ValueListenableBuilder<
+  //     CommandResult<void, List<AdQuery>>
+  //   >(
+  //     valueListenable: dashboardView.getAllAdsCommand.results,
+  //     builder: (context, result, _) {
+  //       if (result.isExecuting) {
+  //         return Center(
+  //           child: SizedBox(
+  //             width: 30.0,
+  //             height: 30.0,
+  //             child: CircularProgressIndicator(),
+  //           ),
+  //         );
+  //       }
+  //       if (result.hasError) {
+  //         if (result.error is ApiError) {
+  //           return Text(
+  //             'Error: ${(result.error as ApiError).message}',
+  //           );
+  //         }
+  //       }
+  //       if (result.hasData) {
+  //         return Expanded(
+  //           child: ListView.builder(
+  //             itemCount: result.data?.length,
+  //             itemBuilder: (context, index) {
+  //               final ad = result.data![index];
+  //               return ListTile(
+  //                 title: Text(ad.title ?? 'No Title'),
+  //                 subtitle: Text(
+  //                   ad.category?.description ?? 'No Category',
+  //                 ),
+  //                 onTap: () {
+  //                   Navigator.of(
+  //                     context,
+  //                   ).pushNamed(Routers.test);
+  //                 },
+  //               );
+  //             },
+  //           ),
+  //         );
+  //       }
+  //       return Text('No data available.');
+  //     },
+  //   ),
+  // ),
 }
