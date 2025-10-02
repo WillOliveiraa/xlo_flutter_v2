@@ -26,47 +26,47 @@ class Ad extends LucidValidator<Ad> {
 
   String? get id => _id;
 
-  void setId(final id) => _id = id;
+  void setId(String? id) => _id = id;
 
   String get title => _title;
 
-  void setTitle(title) => _title = title;
+  void setTitle(String title) => _title = title;
 
   String get description => _description;
 
-  void setDescription(description) => _description = description;
+  void setDescription(String description) => _description = description;
 
   num get price => _price;
 
-  void setPrice(price) => _price = price;
+  void setPrice(num price) => _price = price;
 
   int? get views => _views;
 
-  void setViews(views) => _views = views;
+  void setViews(int? views) => _views = views;
 
   List<String> get images => _images;
 
-  void setImages(images) => _images = images;
+  void setImages(List<String> images) => _images = images;
 
   AdStatus get status => _status;
 
-  void setStatus(status) => _status = status;
+  void setStatus(AdStatus status) => _status = status;
 
   Category get category => _category;
 
-  void setCategory(category) => _category = category;
+  void setCategory(Category category) => _category = category;
 
   User get owner => _owner;
 
-  void setOwner(owner) => _owner = owner;
+  void setOwner(User owner) => _owner = owner;
 
   bool? get hidePhone => _hidePhone;
 
-  void setHidePhone(hidePhone) => _hidePhone = hidePhone;
+  void setHidePhone(bool? hidePhone) => _hidePhone = hidePhone;
 
   DateTime? get createdAt => _createdAt;
 
-  void setCreatedAt(createdAt) => _createdAt = createdAt;
+  void setCreatedAt(DateTime? createdAt) => _createdAt = createdAt;
 
   Ad({
     String? id,
@@ -158,5 +158,9 @@ class AdValidator extends LucidValidator<Ad> {
       (ad) => ad.price,
       key: 'price',
     ).greaterThan(0, message: 'Price must be greater than 0');
+    ruleFor(
+      (ad) => ad.category.description.trim(),
+      key: 'category',
+    ).notEmpty(message: 'Category is required');
   }
 }

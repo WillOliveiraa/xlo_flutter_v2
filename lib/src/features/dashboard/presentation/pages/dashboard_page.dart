@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:xlo_flutter_v2/src/core/widgets/category_container.dart';
 import 'package:xlo_flutter_v2/src/core/widgets/custom_banner.dart';
 import 'package:xlo_flutter_v2/src/core/widgets/ds_icon_button.dart';
 import 'package:xlo_flutter_v2/src/core/widgets/product_container.dart';
 import 'package:xlo_flutter_v2/src/core/widgets/search_container.dart';
 import 'package:xlo_flutter_v2/src/core/widgets/title_container.dart';
-import 'package:xlo_flutter_v2/src/features/dashboard/presentation/viewmodels/dashboard_viewmodel.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -48,7 +46,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final dashboardView = context.read<DashboardViewmodel>();
+    // final dashboardView = context.read<DashboardViewmodel>();
 
     return Scaffold(
       appBar: AppBar(
@@ -85,7 +83,6 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                   TitleContainer(title: 'Categories', onTap: () {}),
                   SizedBox(
-                    // color: Colors.amberAccent,
                     height: 150,
                     child: ListView.separated(
                       separatorBuilder: (context, index) => SizedBox(width: 16),

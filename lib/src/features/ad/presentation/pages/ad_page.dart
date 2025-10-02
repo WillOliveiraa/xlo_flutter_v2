@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xlo_flutter_v2/src/core/errors/api_error.dart';
 import 'package:xlo_flutter_v2/src/core/theme/app_colors.dart';
+import 'package:xlo_flutter_v2/src/core/widgets/ds_select.dart';
+import 'package:xlo_flutter_v2/src/core/widgets/skeleton/ds_skeleton.dart';
 import 'package:xlo_flutter_v2/src/features/ad/domain/entities/ad.dart';
 import 'package:xlo_flutter_v2/src/features/ad/presentation/viewmodels/ad_viewmodel.dart';
 
@@ -100,6 +102,36 @@ class _AdPageState extends State<AdPage> {
                   );
                 },
               ),
+              const SizedBox(height: 16.0),
+              ValueListenableBuilder(
+                valueListenable: adViewmodel.getAllCategoriesCommand.results,
+                builder: (_, result, __) {
+                  if (result.isExecuting) {
+                    return DSSkeleton(
+                      child: DSSkeletonContainer(
+                        height: 54,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    );
+                  }
+                  if (result.hasData) {
+                    return DSSelect(
+                      label: 'Categoria',
+                      children:
+                          result.data!.map((item) => item.description).toList(),
+                      onChanged: (value) {
+                        final item = result.data!.firstWhere(
+                          (el) => el.description == value,
+                        );
+                        input.setCategory(item);
+                      },
+                      validator: validator.byField(input, 'category'),
+                      enabled: !result.isExecuting,
+                    );
+                  }
+                  return SizedBox.shrink();
+                },
+              ),
               const SizedBox(height: 32.0),
               ValueListenableBuilder(
                 valueListenable: adViewmodel.saveAdCommand.isExecuting,
@@ -109,6 +141,9 @@ class _AdPageState extends State<AdPage> {
                         isExecuting
                             ? null
                             : () {
+                              debugPrint(
+                                validator.getExceptions(input).toString(),
+                              );
                               if (formKey.currentState!.validate()) {
                                 adViewmodel.saveAdCommand.execute(input);
                               }

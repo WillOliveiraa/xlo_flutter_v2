@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:xlo_flutter_v2/src/core/errors/failure.dart';
+import 'package:xlo_flutter_v2/src/core/http/custom_query_builder.dart';
 import 'package:xlo_flutter_v2/src/core/http/http_client.dart';
 import 'package:xlo_flutter_v2/src/core/utils/tables_keys.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/gateway/category_gateway.dart';
@@ -17,8 +18,10 @@ class CategoryGatewayHttp implements CategoryGateway {
   }
 
   @override
-  Future<Either<Failure, List<Category>>> getAll() async {
-    final response = await httpClient.get(keyCategoryTable);
+  Future<Either<Failure, List<Category>>> getAll(
+    CustomQueryBuilder? filters,
+  ) async {
+    final response = await httpClient.get(keyCategoryTable, filters: filters);
     return response.fold((failure) => Left(failure), (data) {
       final categories =
           data.map((e) => Category.fromMap(e as Map<String, dynamic>)).toList();
