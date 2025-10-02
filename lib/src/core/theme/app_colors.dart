@@ -14,4 +14,14 @@ class AppColors {
   static const Color info = Color(0xFFffffff);
   static const Color lightGray = Color(0xFFf8f8f8);
   static const Color shadowColor = Color.fromRGBO(0, 0, 0, 8);
+
+  /// Neutral Colors
+  static const Color black = Color(0xFF101111);
+  static const Color grey80 = Color(0xFF303030);
+  static const Color grey60 = Color(0xFF505050);
+  static const Color grey40 = Color(0xFF888888);
+  static const Color grey20 = Color(0xFFCDCDCD);
+  static const Color grey10 = Color(0xFFEDEBEB);
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color blue = Color(0xFF7186C8);
 }

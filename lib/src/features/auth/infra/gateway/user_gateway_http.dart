@@ -35,4 +35,14 @@ class UserGatewayHttp implements UserGateway {
       return Right(User.fromMap(data as Map<String, dynamic>));
     });
   }
+
+  @override
+  Future<Either<Failure, User?>> getCurrentUser() async {
+    final response = await _httpClient.get(keyUserTable);
+    return response.fold((failure) => Left(failure), (data) {
+      final user =
+          data.map((e) => User.fromMap(e as Map<String, dynamic>)).toList();
+      return Right(user.isNotEmpty ? user.first : null);
+    });
+  }
 }

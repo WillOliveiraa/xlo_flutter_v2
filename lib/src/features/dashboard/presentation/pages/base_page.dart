@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:xlo_flutter_v2/src/core/errors/api_error.dart';
 import 'package:xlo_flutter_v2/src/core/routers/routers.dart';
 import 'package:xlo_flutter_v2/src/core/theme/app_colors.dart';
 import 'package:xlo_flutter_v2/src/features/ad/presentation/pages/ad_page.dart';
+import 'package:xlo_flutter_v2/src/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:xlo_flutter_v2/src/features/dashboard/presentation/pages/dashboard_page.dart';
 
 class BasePage extends StatefulWidget {
@@ -12,25 +15,9 @@ class BasePage extends StatefulWidget {
 }
 
 class _BasePageState extends State<BasePage> {
-  int currentPageIndex = 0;
-  List<Widget> get _pages => [
-    DashboardPage(),
-    AdPage(),
-    Scaffold(
-      appBar: AppBar(title: const Text('Chat')),
-      body: Container(color: Colors.red),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).pushNamed(Routers.test),
-        tooltip: 'Login',
-        child: const Icon(Icons.person),
-      ),
-    ),
-    Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
-      body: Container(color: Colors.green),
-    ),
-  ];
+  late AuthViewModel authViewModel;
 
+  int currentPageIndex = 0;
   List<Widget> get _destinations => [
     NavigationDestination(
       selectedIcon: Icon(Icons.home),
@@ -55,8 +42,68 @@ class _BasePageState extends State<BasePage> {
   ];
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    authViewModel = context.read<AuthViewModel>();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final Widget currentPage = _pages[currentPageIndex];
+    final List<Widget> pages = [
+      DashboardPage(),
+      AdPage(),
+      Scaffold(
+        appBar: AppBar(title: const Text('Chat')),
+        body: Container(color: Colors.red),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => Navigator.of(context).pushNamed(Routers.test),
+          tooltip: 'Login',
+          child: const Icon(Icons.person),
+        ),
+      ),
+      Scaffold(
+        appBar: AppBar(title: const Text('Profile')),
+        // body: Container(color: Colors.green),
+        body: ValueListenableBuilder(
+          valueListenable: authViewModel.getCurrentUserCommand.results,
+          builder: (context, result, child) {
+            if (result.isExecuting) {
+              return Center(
+                child: SizedBox(
+                  width: 30.0,
+                  height: 30.0,
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            if (result.hasError) {
+              if (result.error is ApiError) {
+                return Text('Error: ${(result.error as ApiError).message}');
+              }
+            }
+            if (result.hasData) {
+              return Center(
+                child: Column(
+                  children: [
+                    Text(result.data?.name ?? ''),
+                    Text(result.data?.email ?? ''),
+                    ValueListenableBuilder(
+                      valueListenable: authViewModel.isUserLoggedIn,
+                      builder: (context, isUserLoggedIn, child) {
+                        return Text('isUserLoggedIn: $isUserLoggedIn');
+                      },
+                    ),
+                  ],
+                ),
+              );
+            }
+            return Container(color: Colors.green);
+          },
+        ),
+      ),
+    ];
+
+    final Widget currentPage = pages[currentPageIndex];
     return Scaffold(
       body: currentPage,
       bottomNavigationBar: NavigationBar(
