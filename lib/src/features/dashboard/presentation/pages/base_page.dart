@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xlo_flutter_v2/src/core/errors/api_error.dart';
-import 'package:xlo_flutter_v2/src/core/routers/routers.dart';
 import 'package:xlo_flutter_v2/src/core/theme/app_colors.dart';
-import 'package:xlo_flutter_v2/src/features/ad/presentation/pages/ad_page.dart';
 import 'package:xlo_flutter_v2/src/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:xlo_flutter_v2/src/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:xlo_flutter_v2/src/features/dashboard/presentation/pages/orders_page.dart';
 
 class BasePage extends StatefulWidget {
   const BasePage({super.key});
@@ -16,6 +15,7 @@ class BasePage extends StatefulWidget {
 
 class _BasePageState extends State<BasePage> {
   late AuthViewModel authViewModel;
+  final bucket = PageStorageBucket();
 
   int currentPageIndex = 0;
   List<Widget> get _destinations => [
@@ -50,20 +50,25 @@ class _BasePageState extends State<BasePage> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
-      DashboardPage(),
-      AdPage(),
+      DashboardPage(key: PageStorageKey('dashboard')),
+      OrdersPage(key: PageStorageKey('orders')),
       Scaffold(
-        appBar: AppBar(title: const Text('Chat')),
-        body: Container(color: Colors.red),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.of(context).pushNamed(Routers.test),
-          tooltip: 'Login',
-          child: const Icon(Icons.person),
+        key: PageStorageKey('favorite'),
+        appBar: AppBar(title: const Text('Favorites')),
+        body: ListView.builder(
+          itemCount: 30,
+          itemBuilder: (_, index) {
+            return ListTile(
+              title: Text('Lorem Ipsum'),
+              subtitle: Text('$index'),
+              onTap: () {},
+            );
+          },
         ),
       ),
       Scaffold(
+        key: PageStorageKey('profile'),
         appBar: AppBar(title: const Text('Profile')),
-        // body: Container(color: Colors.green),
         body: ValueListenableBuilder(
           valueListenable: authViewModel.getCurrentUserCommand.results,
           builder: (context, result, child) {
@@ -105,7 +110,7 @@ class _BasePageState extends State<BasePage> {
 
     final Widget currentPage = pages[currentPageIndex];
     return Scaffold(
-      body: currentPage,
+      body: PageStorage(bucket: bucket, child: currentPage),
       bottomNavigationBar: NavigationBar(
         height: 55,
         destinations: _destinations,

@@ -7,6 +7,7 @@ import 'package:xlo_flutter_v2/src/core/widgets/ds_select.dart';
 import 'package:xlo_flutter_v2/src/core/widgets/skeleton/ds_skeleton.dart';
 import 'package:xlo_flutter_v2/src/features/ad/domain/entities/ad.dart';
 import 'package:xlo_flutter_v2/src/features/ad/presentation/viewmodels/ad_viewmodel.dart';
+import 'package:xlo_flutter_v2/src/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 
 class AdPage extends StatefulWidget {
   const AdPage({super.key});
@@ -41,6 +42,17 @@ class _AdPageState extends State<AdPage> {
             backgroundColor: Colors.red,
           ),
         );
+      }
+    });
+    adViewmodel.saveAdCommand.results.listen((command, _) {
+      if (command.isSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ad saved succefully!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.of(context).pop();
       }
     });
     super.didChangeDependencies();
@@ -141,10 +153,10 @@ class _AdPageState extends State<AdPage> {
                         isExecuting
                             ? null
                             : () {
-                              debugPrint(
-                                validator.getExceptions(input).toString(),
-                              );
                               if (formKey.currentState!.validate()) {
+                                input.setOwner(
+                                  context.read<AuthViewModel>().user!,
+                                );
                                 adViewmodel.saveAdCommand.execute(input);
                               }
                             },

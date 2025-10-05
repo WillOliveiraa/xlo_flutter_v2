@@ -1,6 +1,6 @@
 const keyCategoryTable = 'Categories';
 const keyAdTable = 'Ads';
-const keyUserTable = 'Users';
+const keyUserTable = '_User';
 const keySignUp = 'SignUp';
 const keyLogin = 'Login';
 

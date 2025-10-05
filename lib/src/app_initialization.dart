@@ -56,6 +56,7 @@ class AppInitialization {
       */
       Provider(
         create: (context) => GetCurrentUser(context.read<UserGatewayHttp>()),
+        lazy: true,
       ),
       /*
         VIEWMODELS
@@ -91,11 +92,15 @@ class AppInitialization {
       /*
         USECASES
       */
-      Provider(create: (context) => GetAllAds(context.read<AdGatewayHttp>())),
+      Provider(
+        create: (context) => GetAllAds(context.read<AdGatewayHttp>()),
+        lazy: true,
+      ),
       Provider(create: (context) => SaveAd(context.read<AdGatewayHttp>())),
       Provider(
         create:
             (context) => GetAllCategories(context.read<CategoryGatewayHttp>()),
+        lazy: true,
       ),
       /*
         VIEWMODELS

@@ -49,6 +49,7 @@ class _DashboardPageState extends State<DashboardPage> {
     // final dashboardView = context.read<DashboardViewmodel>();
 
     return Scaffold(
+      key: widget.key,
       appBar: AppBar(
         title: const Text('Dashboard'),
         actions: [
