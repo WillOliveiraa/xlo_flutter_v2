@@ -34,8 +34,9 @@ class AuthViewModel {
     await Future.delayed(const Duration(seconds: 8));
     return result.fold((l) => throw l, (data) {
       setUser(data);
-      isUserLoggedIn.execute(true);
-      setIsUserLoggedIn(true);
+      final hasData = data != null;
+      isUserLoggedIn.execute(hasData);
+      setIsUserLoggedIn(hasData);
       return data;
     });
   }

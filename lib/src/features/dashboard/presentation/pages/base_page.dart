@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xlo_flutter_v2/src/core/errors/api_error.dart';
+import 'package:xlo_flutter_v2/src/core/routers/routers.dart';
+import 'package:xlo_flutter_v2/src/core/spacings/spacing.dart';
 import 'package:xlo_flutter_v2/src/core/theme/app_colors.dart';
 import 'package:xlo_flutter_v2/src/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:xlo_flutter_v2/src/features/dashboard/presentation/pages/dashboard_page.dart';
@@ -102,7 +104,27 @@ class _BasePageState extends State<BasePage> {
                 ),
               );
             }
-            return Container(color: Colors.green);
+            return Center(
+              child: Container(
+                padding: const EdgeInsets.all(Spacing.x2),
+                child: OutlinedButton(
+                  onPressed:
+                      result.isExecuting
+                          ? null
+                          : () => Navigator.pushNamed(context, Routers.login),
+                  child:
+                      result.isExecuting
+                          ? SizedBox(
+                            width: 30.0,
+                            height: 30.0,
+                            child: CircularProgressIndicator(
+                              color: AppColors.info,
+                            ),
+                          )
+                          : const Text('Login'),
+                ),
+              ),
+            );
           },
         ),
       ),

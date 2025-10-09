@@ -106,6 +106,7 @@ class ParseServerAdapter implements HttpClient {
 
   Future<Either<Failure, List<dynamic>>> currentUser() async {
     final parseUser = await ParseUser.currentUser();
+    if (parseUser == null) return Right([]);
     final response = await ParseUser.getCurrentUserFromServer(
       parseUser.sessionToken!,
     );

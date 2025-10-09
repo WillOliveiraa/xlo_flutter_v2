@@ -16,9 +16,16 @@ import 'package:xlo_flutter_v2/src/features/auth/presentation/viewmodels/login_v
 import 'package:xlo_flutter_v2/src/features/auth/presentation/viewmodels/sign_up_viewmodel.dart';
 import 'package:xlo_flutter_v2/src/features/dashboard/presentation/viewmodels/dashboard_viewmodel.dart';
 
+//-----------------------------------------------------------------------------
+// AppInitialization #
+//-----------------------------------------------------------------------------
+
 class AppInitialization {
   AppInitialization();
 
+  //-----------------------------------------------------------------------------
+  // AppInitialization # initializeInjectDependencies
+  //-----------------------------------------------------------------------------
   List<SingleChildWidget> initializeInjectDependencies() {
     return [
       Provider(create: (context) => ParseServerAdapter()),
@@ -26,6 +33,9 @@ class AppInitialization {
     ];
   }
 
+  //-----------------------------------------------------------------------------
+  // AppInitialization # _initializeViewmodels
+  //-----------------------------------------------------------------------------
   List<SingleChildWidget> _initializeViewmodels() {
     return [
       /*
@@ -49,6 +59,9 @@ class AppInitialization {
     ];
   }
 
+  //-----------------------------------------------------------------------------
+  // AppInitialization # _initializeAuth
+  //-----------------------------------------------------------------------------
   List<SingleChildWidget> _initializeAuth() {
     return [
       /*
@@ -68,6 +81,9 @@ class AppInitialization {
     ];
   }
 
+  //-----------------------------------------------------------------------------
+  // AppInitialization # _initializeUser
+  //-----------------------------------------------------------------------------
   List<SingleChildWidget> _initializeUser() {
     return [
       /*
@@ -87,6 +103,9 @@ class AppInitialization {
     ];
   }
 
+  //-----------------------------------------------------------------------------
+  // AppInitialization # _initializeAd
+  //-----------------------------------------------------------------------------
   List<SingleChildWidget> _initializeAd() {
     return [
       /*

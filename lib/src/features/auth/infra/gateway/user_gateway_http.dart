@@ -7,6 +7,10 @@ import 'package:xlo_flutter_v2/src/features/auth/domain/entities/login_input.dar
 import 'package:xlo_flutter_v2/src/features/auth/domain/entities/sign_up_user.dart';
 import 'package:xlo_flutter_v2/src/features/auth/domain/entities/user.dart';
 
+//-----------------------------------------------------------------------------
+// UserGatewayHttp #
+//-----------------------------------------------------------------------------
+
 class UserGatewayHttp implements UserGateway {
   final HttpClient _httpClient;
 
