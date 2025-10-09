@@ -69,7 +69,7 @@ class _OrdersPageState extends State<OrdersPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).pushNamed(Routers.ad),
+        onPressed: () => Navigator.of(context).pushNamed(Routers.category),
         tooltip: 'Cadastrar um Ad',
         child: const Icon(Icons.person),
       ),

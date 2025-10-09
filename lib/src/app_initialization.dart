@@ -4,9 +4,11 @@ import 'package:xlo_flutter_v2/src/core/http/parse_server_adapter.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/query/get_all_ads.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/usecases/get_all_categories.dart';
 import 'package:xlo_flutter_v2/src/features/ad/application/usecases/save_ad.dart';
+import 'package:xlo_flutter_v2/src/features/ad/application/usecases/save_category.dart';
 import 'package:xlo_flutter_v2/src/features/ad/infra/gateway/ad_gateway_http.dart';
 import 'package:xlo_flutter_v2/src/features/ad/infra/gateway/category_gateway_http.dart';
 import 'package:xlo_flutter_v2/src/features/ad/presentation/viewmodels/ad_viewmodel.dart';
+import 'package:xlo_flutter_v2/src/features/ad/presentation/viewmodels/category_viewmodel.dart';
 import 'package:xlo_flutter_v2/src/features/auth/application/usecases/get_current_user.dart';
 import 'package:xlo_flutter_v2/src/features/auth/application/usecases/login.dart';
 import 'package:xlo_flutter_v2/src/features/auth/application/usecases/sign_up_user.dart';
@@ -56,6 +58,7 @@ class AppInitialization {
       ..._initializeAuth(),
       ..._initializeUser(),
       ..._initializeAd(),
+      ..._initializeDashboard(),
     ];
   }
 
@@ -117,6 +120,9 @@ class AppInitialization {
       ),
       Provider(create: (context) => SaveAd(context.read<AdGatewayHttp>())),
       Provider(
+        create: (context) => SaveCategory(context.read<CategoryGatewayHttp>()),
+      ),
+      Provider(
         create:
             (context) => GetAllCategories(context.read<CategoryGatewayHttp>()),
         lazy: true,
@@ -125,14 +131,31 @@ class AppInitialization {
         VIEWMODELS
       */
       Provider(
-        create: (context) => DashboardViewmodel(context.read<GetAllAds>()),
-      ),
-      Provider(
         create:
             (context) => AdViewmodel(
               context.read<SaveAd>(),
               context.read<GetAllCategories>(),
             ),
+      ),
+      Provider(
+        create: (context) => CategoryViewModel(context.read<SaveCategory>()),
+      ),
+    ];
+  }
+
+  //-----------------------------------------------------------------------------
+  // AppInitialization # _initializeDashboard
+  //-----------------------------------------------------------------------------
+  List<SingleChildWidget> _initializeDashboard() {
+    return [
+      /*
+        USECASES
+      */
+      /*
+        VIEWMODELS
+      */
+      Provider(
+        create: (context) => DashboardViewmodel(context.read<GetAllAds>()),
       ),
     ];
   }
