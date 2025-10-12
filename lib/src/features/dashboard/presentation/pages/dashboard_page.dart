@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:xlo_flutter_v2/src/core/widgets/category_container.dart';
 import 'package:xlo_flutter_v2/src/core/widgets/custom_banner.dart';
-import 'package:xlo_flutter_v2/src/core/widgets/ds_icon_button.dart';
 import 'package:xlo_flutter_v2/src/core/widgets/product_container.dart';
 import 'package:xlo_flutter_v2/src/core/widgets/search_container.dart';
 import 'package:xlo_flutter_v2/src/core/widgets/title_container.dart';
+import 'package:xlo_flutter_v2/src/design_system/atoms/icon_button/ds_icon_button.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});

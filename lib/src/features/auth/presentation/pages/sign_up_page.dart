@@ -2,7 +2,8 @@ import 'package:command_it/command_it.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xlo_flutter_v2/src/core/errors/api_error.dart';
-import 'package:xlo_flutter_v2/src/core/theme/app_colors.dart';
+import 'package:xlo_flutter_v2/src/design_system/molecules/button/ds_button.dart';
+import 'package:xlo_flutter_v2/src/design_system/molecules/text_field/ds_text_field.dart';
 import 'package:xlo_flutter_v2/src/features/auth/domain/entities/sign_up_user.dart';
 import 'package:xlo_flutter_v2/src/features/auth/presentation/viewmodels/sign_up_viewmodel.dart';
 
@@ -66,8 +67,8 @@ class _SignUpPageState extends State<SignUpPage> {
               ValueListenableBuilder(
                 valueListenable: signUpViewmodel.signUpCommand.isExecuting,
                 builder: (_, isExecuting, _) {
-                  return TextFormField(
-                    decoration: InputDecoration(labelText: 'Nome'),
+                  return DSTextField(
+                    labelText: 'Nome',
                     onChanged: input.setName,
                     validator: validator.byField(input, 'name'),
                     enabled: !isExecuting,
@@ -78,8 +79,8 @@ class _SignUpPageState extends State<SignUpPage> {
               ValueListenableBuilder(
                 valueListenable: signUpViewmodel.signUpCommand.isExecuting,
                 builder: (_, isExecuting, _) {
-                  return TextFormField(
-                    decoration: InputDecoration(labelText: 'Email'),
+                  return DSTextField(
+                    labelText: 'Email',
                     onChanged: input.setEmail,
                     validator: validator.byField(input, 'email'),
                     enabled: !isExecuting,
@@ -90,8 +91,8 @@ class _SignUpPageState extends State<SignUpPage> {
               ValueListenableBuilder(
                 valueListenable: signUpViewmodel.signUpCommand.isExecuting,
                 builder: (_, isExecuting, _) {
-                  return TextFormField(
-                    decoration: InputDecoration(labelText: 'Telefone'),
+                  return DSTextField(
+                    labelText: 'Telefone',
                     onChanged: input.setPhone,
                     validator: validator.byField(input, 'phone'),
                     enabled: !isExecuting,
@@ -105,24 +106,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   return ValueListenableBuilder(
                     valueListenable: signUpViewmodel.passwordVisibility,
                     builder: (_, passwordVisibility, _) {
-                      return TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Senha',
-                          suffixIcon: InkWell(
-                            borderRadius: BorderRadius.circular(20),
-                            onTap:
-                                () => signUpViewmodel.passwordVisibility
-                                    .execute(!passwordVisibility),
-                            child: Icon(
-                              passwordVisibility
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
-                              color: AppColors.black40,
-                              size: 24,
-                            ),
-                          ),
-                          errorMaxLines: 2,
-                        ),
+                      return DSTextField(
+                        labelText: 'Senha',
                         onChanged: input.setPassword,
                         validator: validator.byField(input, 'password'),
                         obscureText: !signUpViewmodel.passwordVisibility.value,
@@ -136,25 +121,14 @@ class _SignUpPageState extends State<SignUpPage> {
               ValueListenableBuilder(
                 valueListenable: signUpViewmodel.signUpCommand.isExecuting,
                 builder: (_, isExecuting, _) {
-                  return OutlinedButton(
-                    onPressed:
-                        isExecuting
-                            ? null
-                            : () {
-                              if (formKey.currentState!.validate()) {
-                                signUpViewmodel.signUpCommand.execute(input);
-                              }
-                            },
-                    child:
-                        isExecuting
-                            ? SizedBox(
-                              width: 30.0,
-                              height: 30.0,
-                              child: CircularProgressIndicator(
-                                color: AppColors.info,
-                              ),
-                            )
-                            : const Text('Sign Up'),
+                  return DSButton(
+                    label: 'Sign Up',
+                    isLoading: isExecuting,
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        signUpViewmodel.signUpCommand.execute(input);
+                      }
+                    },
                   );
                 },
               ),

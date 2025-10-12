@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../spacings/spacing.dart';
+import '../../../core/spacings/spacing.dart';
 
 abstract class DSSkeletonItem extends StatelessWidget {
   const DSSkeletonItem({super.key});
@@ -121,11 +121,7 @@ class DSSkeletonExpanded extends DSSkeletonItem {
   final DSSkeletonItem child;
   final int flex;
 
-  const DSSkeletonExpanded({
-    super.key,
-    required this.child,
-    this.flex = 1,
-  });
+  const DSSkeletonExpanded({super.key, required this.child, this.flex = 1});
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xlo_flutter_v2/src/core/theme/app_colors.dart';
-import 'package:xlo_flutter_v2/src/core/widgets/ds_divider.dart';
+import 'package:xlo_flutter_v2/src/design_system/atoms/divider/ds_divider.dart';
+import 'package:xlo_flutter_v2/src/design_system/molecules/text_field/ds_text_field.dart';
 
 class DSSelect extends StatefulWidget {
   final List<String> children;
@@ -8,11 +9,11 @@ class DSSelect extends StatefulWidget {
   final String? label;
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
-  final bool? enabled;
+  final bool enabled;
+  final bool readOnly;
   final EdgeInsetsGeometry? margin;
   final TextEditingController? controller;
   final FocusNode? focusNode;
-  final bool readOnly;
 
   const DSSelect({
     super.key,
@@ -21,7 +22,7 @@ class DSSelect extends StatefulWidget {
     this.label,
     this.onChanged,
     this.validator,
-    this.enabled,
+    this.enabled = true,
     this.margin,
     this.controller,
     this.focusNode,
@@ -53,30 +54,26 @@ class _DSSelectState extends State<DSSelect>
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: widget.label,
-        suffix:
-            widget.readOnly
-                ? null
-                : RotationTransition(
-                  turns: Tween(
-                    begin: 0.0,
-                    end: 1.0,
-                  ).animate(animationController),
-                  child: Icon(
-                    Icons.keyboard_arrow_down,
-                    size: 18,
-                    color: AppColors.primaryText,
-                  ),
+    return DSTextField(
+      labelText: widget.label,
+      suffix:
+          widget.readOnly
+              ? null
+              : RotationTransition(
+                turns: Tween(begin: 0.0, end: 1.0).animate(animationController),
+                child: Icon(
+                  Icons.keyboard_arrow_down,
+                  size: 18,
+                  color: AppColors.primaryText,
                 ),
-      ),
+              ),
       controller: controller,
       focusNode: hasFocus ? focusNode : null,
       readOnly: true,
       onChanged: widget.onChanged,
       validator: widget.validator,
       enabled: widget.enabled,
+      margin: widget.margin,
       onTap: () async {
         FocusScope.of(context).requestFocus(FocusNode());
 

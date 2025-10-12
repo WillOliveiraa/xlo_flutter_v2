@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import '../../theme/app_colors.dart';
-import './ds_skeleton_item.dart';
+import '../../../core/theme/app_colors.dart';
+import 'ds_skeleton_item.dart';
 
-export './ds_skeleton_item.dart';
+export 'ds_skeleton_item.dart';
 
 ///
 /// An enum defines all supported directions of skeletons effect

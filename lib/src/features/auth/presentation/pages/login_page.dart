@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xlo_flutter_v2/src/core/errors/api_error.dart';
 import 'package:xlo_flutter_v2/src/core/routers/routers.dart';
-import 'package:xlo_flutter_v2/src/core/theme/app_colors.dart';
+import 'package:xlo_flutter_v2/src/design_system/molecules/button/ds_button.dart';
+import 'package:xlo_flutter_v2/src/design_system/molecules/text_field/ds_text_field.dart';
 import 'package:xlo_flutter_v2/src/features/auth/domain/entities/login_input.dart';
 import 'package:xlo_flutter_v2/src/features/auth/presentation/viewmodels/login_viewmodel.dart';
 
@@ -68,8 +69,8 @@ class _LoginPageState extends State<LoginPage> {
                 ValueListenableBuilder(
                   valueListenable: loginViewmodel.loginCommand.isExecuting,
                   builder: (_, isExecuting, _) {
-                    return TextFormField(
-                      decoration: InputDecoration(labelText: 'Email'),
+                    return DSTextField(
+                      labelText: 'Email',
                       onChanged: input.setEmail,
                       validator: validator.byField(input, 'email'),
                       enabled: !isExecuting,
@@ -83,26 +84,11 @@ class _LoginPageState extends State<LoginPage> {
                     return ValueListenableBuilder(
                       valueListenable: loginViewmodel.passwordVisibility,
                       builder: (_, passwordVisibility, _) {
-                        return TextFormField(
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            suffixIcon: InkWell(
-                              borderRadius: BorderRadius.circular(20),
-                              onTap:
-                                  () => loginViewmodel.passwordVisibility
-                                      .execute(!passwordVisibility),
-                              child: Icon(
-                                passwordVisibility
-                                    ? Icons.visibility_outlined
-                                    : Icons.visibility_off_outlined,
-                                color: AppColors.black40,
-                                size: 24,
-                              ),
-                            ),
-                          ),
+                        return DSTextField(
+                          labelText: 'Password',
                           onChanged: input.setPassword,
                           validator: validator.byField(input, 'password'),
-                          obscureText: !loginViewmodel.passwordVisibility.value,
+                          obscureText: true,
                           enabled: !isExecuting,
                         );
                       },
@@ -125,25 +111,14 @@ class _LoginPageState extends State<LoginPage> {
                 ValueListenableBuilder(
                   valueListenable: loginViewmodel.loginCommand.isExecuting,
                   builder: (_, isExecuting, _) {
-                    return OutlinedButton(
-                      onPressed:
-                          isExecuting
-                              ? null
-                              : () {
-                                if (formKey.currentState!.validate()) {
-                                  loginViewmodel.loginCommand.execute(input);
-                                }
-                              },
-                      child:
-                          isExecuting
-                              ? SizedBox(
-                                width: 30.0,
-                                height: 30.0,
-                                child: CircularProgressIndicator(
-                                  color: AppColors.info,
-                                ),
-                              )
-                              : const Text('Login'),
+                    return DSButton(
+                      label: 'Login',
+                      isLoading: isExecuting,
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          loginViewmodel.loginCommand.execute(input);
+                        }
+                      },
                     );
                   },
                 ),

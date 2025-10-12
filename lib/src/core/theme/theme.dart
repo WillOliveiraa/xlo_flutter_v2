@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xlo_flutter_v2/src/core/theme/text_theme.dart';
 import 'package:xlo_flutter_v2/src/core/utils/contants.dart';
-import 'package:xlo_flutter_v2/src/core/widgets/ds_icon_button.dart';
+import 'package:xlo_flutter_v2/src/design_system/atoms/icon_button/ds_icon_button.dart';
 
 import './app_colors.dart';
 
@@ -57,6 +57,7 @@ class AppTheme {
     TextStyle errorStyle = TextTheme.of(context).bodySmall!.copyWith(
       fontFamily: fontFamily,
       color: AppColors.error,
+      fontSize: 11,
       letterSpacing: 0.0,
     );
 
@@ -120,6 +121,7 @@ class AppTheme {
     return OutlinedButton.styleFrom(
       foregroundColor: AppColors.secondaryBackground,
       backgroundColor: AppColors.primaryColor,
+      disabledBackgroundColor: Colors.grey,
       minimumSize: Size(double.infinity, 56),
       padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
       shape: const RoundedRectangleBorder(
